@@ -4,10 +4,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 
 import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
+import useColorScheme from '../hooks/useColorScheme';import CameraScreen from '../screens/camera/CameraScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import SettingsScreen from '../screens/SettingsScreen';
+import { BottomTabParamList, TabCameraParamList, TabTwoParamList, TabThreeParamList } from '../types';
+import CaptureScreen from '../screens/camera/CaptureScreen';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -16,20 +17,27 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Camera"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
-        name="TabOne"
+        name="Camera"
         component={TabOneNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-camera" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Files"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-folder" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Settings"
+        component={SettingsNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color} />,
         }}
       />
     </BottomTab.Navigator>
@@ -44,15 +52,20 @@ function TabBarIcon(props: { name: string; color: string }) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const TabOneStack = createStackNavigator<TabCameraParamList>();
 
 function TabOneNavigator() {
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+        name="CameraScreen"
+        component={CameraScreen}
+        options={{ headerTitle: 'Camera' }}
+      />
+      <TabOneStack.Screen
+        name="CaptureScreen"
+        component={CaptureScreen}
+        options={{ headerTitle: 'Capture' }}
       />
     </TabOneStack.Navigator>
   );
@@ -66,8 +79,22 @@ function TabTwoNavigator() {
       <TabTwoStack.Screen
         name="TabTwoScreen"
         component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+        options={{ headerTitle: 'Files' }}
       />
     </TabTwoStack.Navigator>
+  );
+}
+
+const TabThreeStack = createStackNavigator<TabThreeParamList>();
+
+function SettingsNavigator() {
+  return (
+    <TabThreeStack.Navigator>
+      <TabThreeStack.Screen
+        name="SettingsScreen"
+        component={SettingsScreen}
+        options={{ headerTitle: 'Settings' }}
+      />
+    </TabThreeStack.Navigator>
   );
 }

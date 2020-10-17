@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "zuckd",
-    "slug": "zuckd",
+    "name": "facedrop",
+    "slug": "facedrop",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -19,7 +19,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "usesIcloudStorage": true
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

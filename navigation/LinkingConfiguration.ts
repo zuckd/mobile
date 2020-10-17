@@ -8,12 +8,18 @@ export default {
         screens: {
           TabOne: {
             screens: {
-              TabOneScreen: 'one',
+              CameraScreen: 'camera',
+              CaptureScreen: 'capture',
             },
           },
           TabTwo: {
             screens: {
               TabTwoScreen: 'two',
+            },
+          },
+          TabThree: {
+            screens: {
+              TabTwoScreen: 'three',
             },
           },
         },
