@@ -7,6 +7,11 @@ import "firebase/firestore";
 import "firebase/functions";
 import "firebase/storage";
 
+interface UserDoc {
+  group: string,
+  personId: string,
+}
+
 // Initialize Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAXwrKyFm5ZRkWnEyyzWGtD9IPu_epbDVE",
@@ -19,6 +24,8 @@ const firebaseConfig = {
   measurementId: "G-FQTQT4EPWT"
 };
 
+const GROUP = "hackathondefault1";
+
 const firebase_ = firebase.initializeApp(firebaseConfig);
 const functions = firebase_.functions();
 const db = firebase_.firestore();
@@ -27,17 +34,46 @@ const storage = firebase_.storage();
 
 export default firebase_
 
-export const addUser = async (email: string, password: string, image: string) => {
-  const addFace = functions.httpsCallable("addFace");
-  const resp = await addFace({image});
-  const pid = resp.data;
+// export const addUser = async (email: string, password: string, image: string) => {
+//   const addFace = functions.httpsCallable("addFace");
+//   const resp = await addFace({image});
+//   const pid = resp.data;
+//   const user = await auth.createUserWithEmailAndPassword(email, password);
+//   await db.collection("users").doc(user.user?.uid).set({
+//     group: GROUP,
+//     personId: pid
+//   });
+//   await db.collection("personIds").doc(pid).set({
+//     uid: user.user?.uid
+//   });
+// };
+
+export const registerUser = async (email: string, password: string) => {
   const user = await auth.createUserWithEmailAndPassword(email, password);
   await db.collection("users").doc(user.user?.uid).set({
-    group: "hackathondefault1",
+    group: GROUP,
+    personId: ""
+  });
+};
+
+export const addFace = async (image: string, personId?: string) => {
+  const addFace = functions.httpsCallable("addFace");
+  const resp = await addFace({image, personId});
+  return resp.data;
+};
+
+export const getPidOfUser = async () => {
+  const doc = await db.collection("users").doc(auth.currentUser?.uid).get();
+  return doc.data() as UserDoc;
+};
+
+export const setPidOfUser = async (pid: string) => {
+  await db.collection("users").doc(auth.currentUser?.uid).set({
+    group: GROUP,
     personId: pid
   });
   await db.collection("personIds").doc(pid).set({
-    uid: user.user?.uid
+    uid: auth.currentUser?.uid,
   });
 };
 
@@ -49,6 +85,7 @@ export const getReceiver = async (image: string) => {
   const uid = doc.data()?.uid;
   return uid;
 }
+
 
 /**
  * wrapper for storage upload
