@@ -27,7 +27,7 @@ const storage = firebase_.storage();
 
 export default firebase_
 
-export const addUser = async (email: string, password: string, image: ArrayBuffer) => {
+export const addUser = async (email: string, password: string, image: string) => {
   const addFace = functions.httpsCallable("addFace");
   const resp = await addFace({image});
   const pid = resp.data;
@@ -41,7 +41,7 @@ export const addUser = async (email: string, password: string, image: ArrayBuffe
   });
 };
 
-export const getReceiver = async (image: ArrayBuffer) => {
+export const getReceiver = async (image: string) => {
   const getPersonId = functions.httpsCallable("getPersonId");
   const resp = await getPersonId({image}); // returns multiple pids
   const pid = resp.data[0];
