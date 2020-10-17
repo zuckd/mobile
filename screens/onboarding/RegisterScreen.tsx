@@ -1,22 +1,22 @@
 import React, { useState } from 'react'
-import { TextInput, Button } from 'react-native-paper'
+import { TextInput, Button, Caption, Headline, Appbar } from 'react-native-paper'
 import { View, StyleSheet } from 'react-native'
 
 import firebase from "../../firebase"
 import { StackNavigationProp } from '@react-navigation/stack';
 import { OnboardingParamList } from '../../types';
 
-type LoginNavigationProp = StackNavigationProp<
+type RegisterNavigationProp = StackNavigationProp<
   OnboardingParamList,
-  'RegisterStack'
+  'RegisterScreen'
 >;
 
 type Props = {
-  navigation: LoginNavigationProp;
+  navigation: RegisterNavigationProp;
 };
 
 
-const RegisterScreen = () => {
+const RegisterScreen = ({navigation} : Props) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -41,10 +41,15 @@ const RegisterScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Appbar.BackAction style={{marginLeft: -10, marginTop: -10}} onPress={() => navigation.goBack()}/>
+      <Headline>Welcome to FaceDrop</Headline>
+      <Caption>We're glad to have you.</Caption>
+      <View style={styles.inputContainer}>
       <TextInput style={styles.input} label="Email" value={email} onChangeText={setEmail}/>
       <TextInput style={styles.input} secureTextEntry={true} label="Password" value={password} onChangeText={setPassword}/>
       <TextInput style={styles.input} secureTextEntry={true} label="Confirm Password" value={confirmPassword} onChangeText={setConfirmPassword}/>
-      <Button style={styles.button} contentStyle={styles.buttonContent} labelStyle={styles.buttonLabel} mode="contained" onPress={onRegister}>Register</Button>
+      <Button style={styles.button} color={'#0a7cff'} contentStyle={styles.buttonContent} labelStyle={styles.buttonLabel} mode="contained" onPress={onRegister}>Register</Button>
+      </View>
     </View>
   )
 }
@@ -54,6 +59,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     padding: 40,
+  },
+  inputContainer: {
+    marginTop: 40,
   },
   button: {
     marginBottom: 20,
@@ -65,7 +73,7 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
   },
   input: {
-    marginBottom: 20,
+    marginBottom: 10,
   },
 })
 

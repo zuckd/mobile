@@ -9,6 +9,8 @@ import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { TabCameraParamList } from '../../types';
+import { StatusBar } from 'expo-status-bar';
+import { ActivityIndicator } from 'react-native-paper';
 
 type Face = {
   bounds: {origin: {x: number, y: number},
@@ -32,6 +34,7 @@ export default function CameraScreen({ navigation }: Props) {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [disabled, setDisabled] = useState(false);
   const camera = useRef<Camera>(null);
+  const [processing, setProcessing] = useState(false);
 
   const [face, setFace] = useState<FaceDetector.FaceFeature|null>(null);
 
@@ -51,9 +54,10 @@ export default function CameraScreen({ navigation }: Props) {
 
   const onCapturePress = async () => {
     if (camera && face) {
+      setProcessing(true)
       camera.current?.takePictureAsync()
         .then(photo => FaceDetector.detectFacesAsync(photo.uri, {
-            mode: FaceDetector.Constants.Mode.accurate,
+          mode: FaceDetector.Constants.Mode.fast,
             detectLandmarks: FaceDetector.Constants.Landmarks.none,
             runClassifications: FaceDetector.Constants.Classifications.none,
         }))
@@ -69,8 +73,12 @@ export default function CameraScreen({ navigation }: Props) {
                 width: mainFace.bounds.size.width,
                 height: mainFace.bounds.size.height,
             }}])
-        }).then(i => navigation.navigate("CaptureScreen", {image: i}))
+        }).then(i => {
+          setProcessing(false)
+          navigation.navigate("CaptureScreen", {image: i})
+        })
         .catch(e => console.log(e))
+        .finally(() => setProcessing(false))
     }
   }
 
@@ -96,6 +104,7 @@ export default function CameraScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="light"/>
       <Camera 
         style={styles.camera} 
         type={type} 
@@ -130,6 +139,7 @@ export default function CameraScreen({ navigation }: Props) {
           : null
           }
 
+          {!disabled && !processing ?
           <TouchableOpacity
             style={styles.circle}
             disabled={disabled}
@@ -141,6 +151,9 @@ export default function CameraScreen({ navigation }: Props) {
               <Circle cx="5" cy="5" r="2.5" fill={disabled?"#00000055":"white"} />
             </Svg>
           </TouchableOpacity>
+          : null}
+
+          {processing ? <ActivityIndicator style={styles.circle} size={50} color={"#0a7cff"}/> : null}
         </View>
       </Camera>
     </View>

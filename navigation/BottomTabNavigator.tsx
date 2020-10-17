@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';import CameraScreen from '../screens/camera/CameraScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import FilesScreen from '../screens/FilesScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import { BottomTabParamList, TabCameraParamList, TabTwoParamList, TabThreeParamList } from '../types';
 import CaptureScreen from '../screens/camera/CaptureScreen';
@@ -60,7 +60,7 @@ function TabOneNavigator() {
       <TabOneStack.Screen
         name="CameraScreen"
         component={CameraScreen}
-        options={{ headerTitle: 'Camera' }}
+        options={{ headerShown: false }}
       />
       <TabOneStack.Screen
         name="CaptureScreen"
@@ -77,8 +77,8 @@ function TabTwoNavigator() {
   return (
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
+        name="FilesScreen"
+        component={FilesScreen}
         options={{ headerTitle: 'Files' }}
       />
     </TabTwoStack.Navigator>

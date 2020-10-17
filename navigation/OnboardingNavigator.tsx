@@ -5,8 +5,9 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import { OnboardingParamList } from '../types';
 import StartScreen from '../screens/onboarding/OnboardScreen';
-import LoginScreen from '../screens/onboarding/LoginScreen';
 import RegisterScreen from '../screens/onboarding/RegisterScreen';
+import RegisterFaceScreen from '../screens/onboarding/RegisterFaceScreen';
+import TrainingScreen from '../screens/onboarding/Training';
 
 const OnboardingStack = createStackNavigator<OnboardingParamList>();
 
@@ -15,28 +16,30 @@ const OnboardingStackNavigator = () => {
 
   return (
     <OnboardingStack.Navigator
-      initialRouteName="StartStack"
+      initialRouteName="RegisterFaceScreen"
     >
         <OnboardingStack.Screen
-          name="StartStack"
+          name="StartScreen"
           component={StartScreen}
-          options={{headerTitle: "Start"}}
+          options={{headerShown: false}}
         />
         <OnboardingStack.Screen
-          name="LoginStack"
-          component={LoginScreen}
-          options={{headerTitle: "Login"}}
-        />
-        <OnboardingStack.Screen
-          name="RegisterStack"
+          name="RegisterScreen"
           component={RegisterScreen}
-          options={{headerTitle: "Register"}}
+          options={{headerShown: false}}
+        />
+        <OnboardingStack.Screen
+          name="RegisterFaceScreen"
+          component={RegisterFaceScreen}
+          options={{headerTitle: "Face"}}
+        />
+        <OnboardingStack.Screen
+          name="TrainingScreen"
+          component={TrainingScreen}
+          options={{headerShown: false}}
         />
       </OnboardingStack.Navigator>
   )
 }
 
-const RegisterStack = createStackNavigator<RegisterStackParamList>();
-
-const 
 export default OnboardingStackNavigator;

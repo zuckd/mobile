@@ -5,10 +5,12 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import EditScreenInfo from '../components/EditScreenInfo'
 import { ScrollView } from 'react-native-gesture-handler';
+import { StatusBar } from 'expo-status-bar';
 
 export default function SettingsScreen() {
   return (
     <ScrollView style={styles.container}>
+      <StatusBar style="dark"/>
       <View style={styles.avatar}>
       <Avatar.Text size={100} label="LO"/>
       <Title style={styles.avatarTitle}>Leo Orpilla III</Title>

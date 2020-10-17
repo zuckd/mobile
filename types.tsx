@@ -18,7 +18,7 @@ export type TabCameraParamList = {
 };
 
 export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+  FilesScreen: undefined;
 };
 
 export type TabThreeParamList = {
@@ -26,8 +26,9 @@ export type TabThreeParamList = {
 };
 
 export type OnboardingParamList = {
-  StartStack: undefined,
-  LoginStack: undefined,
-  RegisterStack: undefined,
-  RegisterFaceStack: undefined,
+  StartScreen: undefined,
+  LoginScreen: undefined,
+  RegisterScreen: undefined,
+  RegisterFaceScreen: undefined,
+  TrainingScreen: {imageOrigin: ImageResult, imageLeft: ImageResult, imageRight: ImageResult},
 }
