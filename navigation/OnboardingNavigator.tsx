@@ -16,7 +16,7 @@ const OnboardingStackNavigator = () => {
 
   return (
     <OnboardingStack.Navigator
-      initialRouteName="RegisterFaceScreen"
+      initialRouteName="StartScreen"
     >
         <OnboardingStack.Screen
           name="StartScreen"

@@ -48,15 +48,16 @@ export default firebase_
 //   });
 // };
 
-export const registerUser = async (email: string, password: string) => {
+export const registerUser = async (email: string, password: string): Promise<firebase.auth.UserCredential> => {
   const user = await auth.createUserWithEmailAndPassword(email, password);
   await db.collection("users").doc(user.user?.uid).set({
     group: GROUP,
     personId: ""
   });
+  return user
 };
 
-export const addFace = async (image: string, personId?: string) => {
+export const addFace = async (image: string, personId?: string): Promise<UserDoc> => {
   const addFace = functions.httpsCallable("addFace");
   const resp = await addFace({image, personId});
   return resp.data;
@@ -100,7 +101,7 @@ export const sendFile = (uid: string, filename: string, data: File | Blob | Uint
   return uploadTask;
 }
 
-export const queryFiles = async () => {
+export const queryFiles = async (): Promise<firebase.storage.Reference[]> => {
   const ref = storage.ref(`${auth.currentUser?.uid}/`);
   const results = await ref.listAll();
   return results.items;

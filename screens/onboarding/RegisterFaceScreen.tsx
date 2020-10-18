@@ -9,6 +9,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { OnboardingParamList } from '../../types';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ActivityIndicator } from 'react-native-paper';
+import { RouteProp } from '@react-navigation/native';
 
 const EPSILON = 4;
 
@@ -33,22 +34,27 @@ type RegisterFaceScreenNavigationProp = StackNavigationProp<
   OnboardingParamList,
   'RegisterFaceScreen'
 >;
+type RegisterFaceScreenRouteProp = RouteProp<
+  OnboardingParamList,
+  'RegisterFaceScreen'
+>;
 
 type Props = {
   navigation: RegisterFaceScreenNavigationProp;
+  route: RegisterFaceScreenRouteProp;
 };
 
-export default function RegisterFaceScreen({ navigation }: Props) {
+export default function RegisterFaceScreen({ route, navigation }: Props) {
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.front);
   const [disabled, setDisabled] = useState(false);
   const camera = useRef<Camera>(null);
 
-  const [imageOrigin, setImageOrigin] = useState<CameraCapturedPicture|null>(null)
-  const [imageLeft, setImageLeft] = useState<CameraCapturedPicture|null>(null)
-  const [imageRight, setImageRight] = useState<CameraCapturedPicture|null>(null)
-  const [imageUp, setImageUp] = useState<CameraCapturedPicture|null>(null)
-  const [imageDown, setImageDown] = useState<CameraCapturedPicture|null>(null)
+  const [imageOrigin, setImageOrigin] = useState<CameraCapturedPicture>()
+  const [imageLeft, setImageLeft] = useState<CameraCapturedPicture>()
+  const [imageRight, setImageRight] = useState<CameraCapturedPicture>()
+  const [imageUp, setImageUp] = useState<CameraCapturedPicture>()
+  const [imageDown, setImageDown] = useState<CameraCapturedPicture>()
 
   const [step, setStep] = useState<Step>(Step.Origin)
   const [processing, setProcessing] = useState(false)
@@ -97,7 +103,7 @@ export default function RegisterFaceScreen({ navigation }: Props) {
           originY: mainFace.bounds.origin.y,
           width: mainFace.bounds.size.width,
           height: mainFace.bounds.size.height,
-      }}])
+      }}], {base64: true})
 
     return croppedImg
   }
@@ -132,14 +138,14 @@ export default function RegisterFaceScreen({ navigation }: Props) {
             )
           }
         }
-        if (step == Step.RotateLeft && mainFace.yawAngle - EPSILON <= -35) {
+        if (step == Step.RotateLeft && mainFace.yawAngle - EPSILON <= -25) {
           console.log("+Yaw")
           if (!imageLeft) {
             setProcessing(true)
             camera.current?.takePictureAsync()
             .then(cropFace)
             .then(image => {
-              setImageOrigin(image)
+              setImageLeft(image)
               setStep(Step.RotateRight)
             })
             .finally(() =>
@@ -147,14 +153,14 @@ export default function RegisterFaceScreen({ navigation }: Props) {
             )
           }
         }
-        if (step == Step.RotateRight && mainFace.yawAngle - EPSILON >= 35) {
+        if (step == Step.RotateRight && mainFace.yawAngle - EPSILON >= 25) {
           console.log("-Yaw")
           if (!imageRight) {
             setProcessing(true)
             await camera.current?.takePictureAsync()
             .then(cropFace)
             .then(image => {
-              setImageOrigin(image)
+              setImageRight(image)
               setStep(Step.Done)
             })
             .finally(() => {

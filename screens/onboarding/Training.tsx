@@ -6,6 +6,7 @@ import { Headline, Caption, ProgressBar, Button } from 'react-native-paper';
 import { RouteProp } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
+import firebase, { addFace, setPidOfUser } from '../../firebase';
 
 type RegisterNavigationProp = StackNavigationProp<
   OnboardingParamList,
@@ -23,11 +24,21 @@ type Props = {
 };
 
 const TrainingScreen = ({route, navigation}: Props) => {
-  //const {imageOrigin, imageLeft, imageRight} = route.params
+  const {imageOrigin, imageLeft, imageRight} = route.params
+  const user = firebase.auth().currentUser
 
   const [done, setDone] = useState(false)
 
-  useEffect(() => {setTimeout(() => setDone(true), 1000)}, [])
+  useEffect(() => {
+    ( async () => {
+    if (imageOrigin.base64) {
+      console.log(imageOrigin.base64.substr(0, 20))
+      await addFace(imageOrigin.base64)
+        .then((e) => {console.log(e); setDone(true)})
+        .catch(e => console.log(e))
+    }
+  })();
+  }, [])
 
   return (
     <SafeAreaView style={styles.container}>

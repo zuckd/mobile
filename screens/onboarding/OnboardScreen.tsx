@@ -26,7 +26,7 @@ const StartScreen = ({navigation}: Props) => {
       await firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .then(creds => navigation.navigate("RegisterFaceScreen"))
+        .then(creds => navigation.navigate("Root"))
   }
 
   const onRegister = () => navigation.navigate("RegisterScreen")
