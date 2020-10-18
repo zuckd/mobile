@@ -57,9 +57,9 @@ export const registerUser = async (email: string, password: string): Promise<fir
   return user
 };
 
-export const addFace = async (image: string, personId?: string): Promise<UserDoc> => {
+export const addFace = async (image: string, personId?: string): Promise<string> => {
   const addFace = functions.httpsCallable("addFace");
-  const resp = await addFace({image, personId});
+  const resp = await addFace({image: image, personId: personId});
   return resp.data;
 };
 
@@ -78,7 +78,7 @@ export const setPidOfUser = async (pid: string) => {
   });
 };
 
-export const getReceiver = async (image: string) => {
+export const getReceiver = async (image: string) : Promise<string|undefined> => {
   const getPersonId = functions.httpsCallable("getPersonId");
   const resp = await getPersonId({image}); // returns multiple pids
   const pid = resp.data[0];

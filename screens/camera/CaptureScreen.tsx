@@ -6,7 +6,9 @@ import { RouteProp } from '@react-navigation/native';
 
 import * as DocumentPicker from 'expo-document-picker';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Button, ProgressBar } from 'react-native-paper';
+import { Button, ProgressBar, Title } from 'react-native-paper';
+import { getReceiver, sendFile } from '../../firebase';
+import { StatusBar } from 'expo-status-bar';
 
 
 
@@ -28,24 +30,64 @@ type Props = {
 const CaptureScreen = ({ route, navigation }: Props) => {
   const { image } = route.params
   const [done, setDone] = useState(false)
-
+  const [uid, setUid] = useState<string|undefined>()
   const [document, setDocument] = useState<DocumentPicker.DocumentResult>()
+  const [error, setError] = useState("")
 
-  useEffect(() => {setTimeout(() => setDone(true), 1000)}, [])
+  useEffect(() => {
+    if (image.base64){
+      getReceiver(image.base64)
+        .then(uid_ => {
+          setUid(uid_)
+        })
+        .catch(e => {console.log(e); setError(e)})
+        .finally(() => setDone(true))
+    }
+  }, [])
 
   const onPress = async () => {
     setDocument(await DocumentPicker.getDocumentAsync())
-    if (document?.type == "success") {
+
+    console.log("Done")
+    console.log(uid)
+    
+    if (document?.type == "success" && uid) {
       const { type, uri, name, size } = document
       console.log(uri)
+
+      const blob = await toBlob(uri)
+      console.log(`Sending ${name} ${blob}to ${uid}`)
+      const response = sendFile(uid, name, blob)
     }
+  }
+
+  async function toBlob(uri: string) : Promise<Blob> {
+  // Why are we using XMLHttpRequest? See:
+  // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+    const blob : Blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function(e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    })
+    return blob
   }
 
   return (
     <View style={styles.container}>
+      <StatusBar style="dark"/>
       <View style={styles.imageContainer}>
       <Image style={{width: 200, height:200}} source={{uri: image.uri}} resizeMethod="resize"/>
       </View>
+
+      <Title>{}</Title>
 
       <LinearGradient
         colors={['#0099ff', '#a033ff', '#ff5280', '#ff7061']}

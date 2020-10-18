@@ -34,8 +34,11 @@ const TrainingScreen = ({route, navigation}: Props) => {
     if (imageOrigin.base64) {
       console.log(imageOrigin.base64.substr(0, 20))
       await addFace(imageOrigin.base64)
-        .then((e) => {console.log(e); setDone(true)})
+        .then(pid => setPidOfUser(pid))
+        .then(() => setDone(true))
         .catch(e => console.log(e))
+    } else {
+      
     }
   })();
   }, [])

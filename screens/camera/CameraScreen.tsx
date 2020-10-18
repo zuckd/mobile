@@ -11,6 +11,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { TabCameraParamList } from '../../types';
 import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator } from 'react-native-paper';
+import { MaterialIcons } from '@expo/vector-icons';
 
 type Face = {
   bounds: {origin: {x: number, y: number},
@@ -72,7 +73,7 @@ export default function CameraScreen({ navigation }: Props) {
                 originY: mainFace.bounds.origin.y,
                 width: mainFace.bounds.size.width,
                 height: mainFace.bounds.size.height,
-            }}])
+            }}],{base64: true})
         }).then(i => {
           setProcessing(false)
           navigation.navigate("CaptureScreen", {image: i})
@@ -118,6 +119,7 @@ export default function CameraScreen({ navigation }: Props) {
           tracking: true,
         }}
       >
+
         <View
           style={{
             flex: 1,
@@ -183,6 +185,15 @@ const styles = StyleSheet.create({
     width: 50,
     borderRadius: 50,
     backgroundColor: 'white',
+  },
+  iconsContainer: {
+    position: 'absolute',      
+    right: 10,
+    top: 30,
+    shadowColor: 'black',
+    shadowOpacity: 0.5,
+    shadowRadius: 7,
+    shadowOffset: {width: 2, height: 2},
   },
   camera: {
     flex: 1,

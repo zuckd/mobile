@@ -21,12 +21,13 @@ const RegisterScreen = ({navigation} : Props) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [error, setError] = useState("")
 
   const onRegister = async () => {
     if (password === confirmPassword) {
       await registerUser(email, password)
         .then(creds => navigation.navigate("RegisterFaceScreen"))
-        .catch(e => console.log(e))
+        .catch(e => setError(e.message))
     }
   }
 
@@ -36,6 +37,7 @@ const RegisterScreen = ({navigation} : Props) => {
       <Headline>Welcome to FaceDrop</Headline>
       <Caption>We're glad to have you.</Caption>
       <View style={styles.inputContainer}>
+        <Caption>{error}</Caption>
         <TextInput style={styles.input} label="Email" value={email} onChangeText={setEmail}/>
         <TextInput style={styles.input} secureTextEntry={true} label="Password" value={password} onChangeText={setPassword}/>
         <TextInput style={styles.input} secureTextEntry={true} label="Confirm Password" value={confirmPassword} onChangeText={setConfirmPassword}/>

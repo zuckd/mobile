@@ -6,6 +6,7 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import EditScreenInfo from '../components/EditScreenInfo'
 import { ScrollView } from 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
+import firebase_ from '../firebase';
 
 export default function SettingsScreen() {
   return (

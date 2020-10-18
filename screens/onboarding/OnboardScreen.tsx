@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { View, StyleSheet, Image, KeyboardAvoidingView, Keyboard, Text, TouchableWithoutFeedback } from "react-native"
-import { TextInput, Button, Avatar, Subheading } from "react-native-paper"
+import { TextInput, Button, Avatar, Subheading, Caption } from "react-native-paper"
 import { StackNavigationProp } from "@react-navigation/stack";
 import { OnboardingParamList } from "../../types";
 import { StatusBar } from "expo-status-bar";
@@ -18,6 +18,7 @@ type Props = {
 const StartScreen = ({navigation}: Props) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
 
   const [imageVisible, setImageVisible] = useState(true)
 
@@ -27,6 +28,7 @@ const StartScreen = ({navigation}: Props) => {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(creds => navigation.navigate("Root"))
+        .catch(e => setError(e.message))
   }
 
   const onRegister = () => navigation.navigate("RegisterScreen")
@@ -43,6 +45,7 @@ const StartScreen = ({navigation}: Props) => {
         }
 
         <View style={styles.buttonContainer}>
+          <Caption>{error}</Caption>
           <TextInput autoCompleteType={"email"} keyboardType={"email-address"} style={styles.input} onFocus={() => setImageVisible(false)} label="Email" value={email} onChangeText={setEmail}/>
           <TextInput style={styles.input} onFocus={() => setImageVisible(false)} secureTextEntry={true} label="Password" value={password} onChangeText={setPassword}/>
           <Button style={styles.button} color={'#0a7cff'} contentStyle={styles.buttonContent} labelStyle={styles.buttonLabel} mode="contained" onPress={onLogin} disabled={email.length == 0 || password.length == 0}>Login</Button>
